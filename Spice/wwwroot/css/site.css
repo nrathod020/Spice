@@ -1,0 +1,45 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.search-background {
+ background:url('/Images/dust_scratches.png')
+}
+.backgroundwhite {
+background-color:white;
+padding:30px;
+border-radius:10px;
+margin-bottom:30px;
+}
+
+.backgroundwhiteBorder {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border:1px solid #ddd;
+}
+
+
+.backgroundwhiteBorder10padding {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+}
+
