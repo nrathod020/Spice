@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Spice.Data;
+using Microsoft.EntityFrameworkCore;
+using Spice.Models;
 
 namespace Spice.Areas.Identity.Pages.Account
 {
@@ -21,11 +24,13 @@ namespace Spice.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ApplicationDbContext _db;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger,ApplicationDbContext db )
         {
             _signInManager = signInManager;
             _logger = logger;
+            _db = db;
         }
 
         /// <summary>
@@ -111,9 +116,12 @@ namespace Spice.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    var user =await _db.Users.Where(u=>u.Email==Input.Email).FirstOrDefaultAsync();
+                    List<ShoppingCart> lstshoppingCart = await _db.ShoppingCart.Where(u => u.ApplicationUserId == user.Id).ToListAsync();
+                    HttpContext.Session.SetInt32("ssCartCount", lstshoppingCart.Count);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

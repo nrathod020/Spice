@@ -26,6 +26,7 @@ namespace Spice.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
+            HttpContext.Session.SetInt32("ssCartCount",0);
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
